@@ -1,0 +1,107 @@
+title: NodeSCAD CLI Configuration Schema
+type: object
+properties:
+  inputFile:
+    type: string
+  outputFile:
+    type: string
+  format:
+    enum:
+      - stl
+      - png
+      - off
+      - dxf
+      - csg
+    default: stl
+  dependenciesFile:
+    type: string
+  makeCommand:
+    type: string
+  variables:
+    type: object
+  gimbalCamera:
+    type: object
+    properties:
+      translate:
+        type: object
+        properties:
+          x:
+            type: number
+          y:
+            type: number
+          z:
+            type: number
+      rotate:
+        type: object
+        properties:
+          x:
+            type: number
+          y:
+            type: number
+          z:
+            type: number
+      distance:
+        type: number
+  vectorCamera:
+    type: object
+    properties:
+      eye:
+        type: object
+        properties:
+          x:
+            type: number
+          y:
+            type: number
+          z:
+            type: number
+      center:
+        type: object
+        properties:
+          x:
+            type: number
+          y:
+            type: number
+          z:
+            type: number
+  autoCenter:
+    type: boolean
+  viewAll:
+    type: boolean
+  imageSize:
+    type: object
+    properties:
+      x:
+        type: number
+        default: 640
+      y:
+        type: number
+        default: 480
+  projection:
+    enum:
+      - ortho
+      - persp
+    default: persp
+  render:
+    type: boolean
+    default: false
+  preview:
+    enum:
+      - opencsg
+      - throwntogether
+    default: opencsg
+  colorSchema:
+    enum:
+      - Cornfield
+      - Sunset
+      - Metallic
+      - Starnight
+      - BeforeDawn
+      - Nature
+      - DeepOcean
+  csgLimit:
+    type: number
+    minimum: 1
+    exclusiveMinimum: true
+required:
+  - inputFile
+  - outputFile
