@@ -9,7 +9,10 @@ var fs = require('fs'),
 	temp = require('temp'),
 	tv4 = require('tv4'),
 
-	configSchema = yaml.safeLoad(fs.readFileSync('./configSchema.yaml'))
+	configSchema = yaml.safeLoad(
+		fs.readFileSync(path.join(__dirname, 'configSchema.yaml'))
+	),
+	nodescad = {}
 
 
 function applyDefaults (options, defaults) {
@@ -26,8 +29,7 @@ function applyDefaults (options, defaults) {
 	return options
 }
 
-
-module.exports.renderFile = function (options, callback) {
+function render (options, callback) {
 
 	var validationResult = tv4.validateResult(options, configSchema, null, true),
 		tempExportFile,
@@ -83,3 +85,14 @@ module.exports.renderFile = function (options, callback) {
 		}
 	)
 }
+
+
+nodescad.renderFile = function (inputFile, options, callback) {
+	options.inputFile = inputFile
+	render(options, callback)
+}
+
+nodescad.render = render
+
+
+module.exports = nodescad
