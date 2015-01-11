@@ -32,7 +32,7 @@ function applyDefaults (options, defaults) {
 function render (options, callback) {
 
 	var validationResult = tv4.validateResult(options, configSchema, null, true),
-		tempExportFile,
+		outputFile,
 		shellCommand,
 		binPath
 
@@ -42,8 +42,7 @@ function render (options, callback) {
 
 	options = applyDefaults(options, jsonSchemaDefaults(clone(configSchema)))
 
-
-	tempExportFile = temp.path({suffix: '.' + options.format})
+	outputFile = options.outputFile || temp.path({suffix: '.' + options.format})
 
 
 	if (os.platform() === 'darwin')
@@ -55,7 +54,7 @@ function render (options, callback) {
 	shellCommand = [
 		binPath,
 		'-o',
-		tempExportFile,
+		outputFile,
 		options.inputFile
 	]
 
@@ -68,20 +67,24 @@ function render (options, callback) {
 				return
 			}
 
-			fs.readFile(tempExportFile, {}, function (error, data) {
+			if (!options.outputFile)
+				fs.readFile(tempExportFile, {}, function (error, data) {
 
-				if (error) {
-					callback(error)
-					return
-				}
-				else
-					callback(null, data)
+					if (error) {
+						callback(error)
+						return
+					}
+					else
+						callback(null, data)
 
-				fs.unlink(tempExportFile, function (error) {
-					if (error && error.code !== 'ENOENT')
-						throw error
+					fs.unlink(tempExportFile, function (error) {
+						if (error && error.code !== 'ENOENT')
+							throw error
+					})
 				})
-			})
+
+			else
+				callback()
 		}
 	)
 }

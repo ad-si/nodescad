@@ -13,4 +13,3 @@ nodeScad.renderFile(
 			console.log(data.toString('utf8'))
 	}
 )
-
