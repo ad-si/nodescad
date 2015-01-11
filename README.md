@@ -18,7 +18,7 @@ var nodescad = require('nodescad'),
 	}
 
 
-nodeScad.renderFile(options, function (error, dataBuffer) {
+nodeScad.render(options, function (error, dataBuffer) {
     if (error)
         console.error(error.message)
     else
