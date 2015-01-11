@@ -36,10 +36,13 @@ function render (options, callback) {
 			orthogonal: 'o',
 			perspective: 'p'
 		},
-		outputFile,
-		shellCommand,
 		cameraCommand = '',
-		binPath
+		variablesCommand = '',
+		variables,
+		shellCommand,
+		outputFile,
+		binPath,
+		key
 
 
 	if (!validationResult.valid)
@@ -71,6 +74,12 @@ function render (options, callback) {
 		].join()
 	}
 
+	// Stringify cli variables
+	if (options.variables !== {})
+		for (key in options.variables)
+			if (options.variables.hasOwnProperty(key))
+				variablesCommand += key + '=' + options.variables[key] + ' '
+
 
 	if (os.platform() === 'darwin')
 		binPath = '~/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
@@ -84,6 +93,7 @@ function render (options, callback) {
 		outputFile,
 		options.dependenciesFile ? '-d ' + options.dependenciesFile : '',
 		options.makeCommand ? '-m ' + options.makeCommand : '',
+		variablesCommand,
 		cameraCommand,
 		'--imgsize=' + [options.imageSize.x, options.imageSize.y].join(),
 		'--projection=' + projectionsMap[options.projection],
@@ -92,8 +102,6 @@ function render (options, callback) {
 		options.csglimit ? '--csglimit=' + options.csglimit : '',
 		options.inputFile
 	]
-
-	console.log(shellCommand.join(' '))
 
 	childProcess.exec(
 		shellCommand.join(' '),
