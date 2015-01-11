@@ -104,4 +104,3 @@ properties:
     exclusiveMinimum: true
 required:
   - inputFile
-  - outputFile
