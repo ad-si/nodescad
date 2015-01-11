@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/adius/nodescad/issues"
   },
-  "homepage": "https://github.com/adius/nodescad"
+  "homepage": "https://github.com/adius/nodescad",
+  "dependencies": {
+    "clone": "^0.2.0",
+    "js-yaml": "^3.2.5",
+    "json-schema-defaults": "0.0.2",
+    "temp": "^0.8.1",
+    "tv4": "^1.1.5"
+  }
 }
