@@ -22,5 +22,8 @@
     "json-schema-defaults": "0.0.2",
     "temp": "^0.8.1",
     "tv4": "^1.1.5"
+  },
+  "scripts": {
+    "test": "node ./test/test.js"
   }
 }
