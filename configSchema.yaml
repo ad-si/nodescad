@@ -22,6 +22,15 @@ properties:
   gimbalCamera:
     type: object
     properties:
+  camera:
+    type: object
+    properties:
+      type:
+        enum:
+          - gimbal
+          - vector
+
+      # If gimbal
       translate:
         type: object
         properties:
@@ -42,9 +51,8 @@ properties:
             type: number
       distance:
         type: number
-  vectorCamera:
-    type: object
-    properties:
+
+      # If vector
       eye:
         type: object
         properties:
@@ -78,9 +86,9 @@ properties:
         default: 480
   projection:
     enum:
-      - ortho
-      - persp
-    default: persp
+      - orthogonal
+      - perspective
+    default: perspective
   render:
     type: boolean
     default: false

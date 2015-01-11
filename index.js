@@ -32,8 +32,13 @@ function applyDefaults (options, defaults) {
 function render (options, callback) {
 
 	var validationResult = tv4.validateResult(options, configSchema, null, true),
+		projectionsMap = {
+			orthogonal: 'o',
+			perspective: 'p'
+		},
 		outputFile,
 		shellCommand,
+		cameraCommand = '',
 		binPath
 
 
@@ -43,6 +48,28 @@ function render (options, callback) {
 	options = applyDefaults(options, jsonSchemaDefaults(clone(configSchema)))
 
 	outputFile = options.outputFile || temp.path({suffix: '.' + options.format})
+
+	if (options.camera.type === 'gimbal') {
+		cameraCommand = '--camera=' + [
+			options.camera.translate.x,
+			options.camera.translate.y,
+			options.camera.translate.z,
+			options.camera.rotate.x,
+			options.camera.rotate.y,
+			options.camera.rotate.z,
+			options.camera.distance
+		].join()
+	}
+	else if (options.camera.type === 'vector') {
+		cameraCommand = '--camera=' + [
+			options.camera.eye.x,
+			options.camera.eye.y,
+			options.camera.eye.z,
+			options.camera.center.x,
+			options.camera.center.y,
+			options.camera.center.z
+		].join()
+	}
 
 
 	if (os.platform() === 'darwin')
@@ -55,8 +82,18 @@ function render (options, callback) {
 		binPath,
 		'-o',
 		outputFile,
+		options.dependenciesFile ? '-d ' + options.dependenciesFile : '',
+		options.makeCommand ? '-m ' + options.makeCommand : '',
+		cameraCommand,
+		'--imgsize=' + [options.imageSize.x, options.imageSize.y].join(),
+		'--projection=' + projectionsMap[options.projection],
+		options.render ? '--render' : '',
+		'--preview=' + options.preview,
+		options.csglimit ? '--csglimit=' + options.csglimit : '',
 		options.inputFile
 	]
+
+	console.log(shellCommand.join(' '))
 
 	childProcess.exec(
 		shellCommand.join(' '),
@@ -68,7 +105,7 @@ function render (options, callback) {
 			}
 
 			if (!options.outputFile)
-				fs.readFile(tempExportFile, {}, function (error, data) {
+				fs.readFile(outputFile, {}, function (error, data) {
 
 					if (error) {
 						callback(error)
@@ -77,7 +114,7 @@ function render (options, callback) {
 					else
 						callback(null, data)
 
-					fs.unlink(tempExportFile, function (error) {
+					fs.unlink(outputFile, function (error) {
 						if (error && error.code !== 'ENOENT')
 							throw error
 					})
@@ -90,12 +127,12 @@ function render (options, callback) {
 }
 
 
+nodescad.render = render
+
 nodescad.renderFile = function (inputFile, options, callback) {
 	options.inputFile = inputFile
 	render(options, callback)
 }
-
-nodescad.render = render
 
 
 module.exports = nodescad
