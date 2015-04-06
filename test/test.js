@@ -24,7 +24,7 @@ nodeScad.render(
 
 		expectedFileSize = 55235
 		actualFileSize = bufferData.toString().length
-		
+
 		assert.equal(
 			actualFileSize,
 			expectedFileSize,

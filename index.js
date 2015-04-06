@@ -22,7 +22,7 @@ function applyDefaults (options, defaults) {
 
 	for (key in defaults)
 		if (defaults.hasOwnProperty(key) &&
-		    typeof options[key] === 'undefined')
+			typeof options[key] === 'undefined')
 			options[key] = defaults[key]
 
 	return options

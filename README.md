@@ -10,9 +10,10 @@ Node.js wrapper for OpenSCAD
 
 ## Usage
 
-```
+```js
 var nodescad = require('nodescad'),
 	options = {
+		binaryPath: '~/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
 	    inputFile: 'path/to/file'
 	    // For more options check out the configSchema.yaml file
 	}
@@ -20,8 +21,8 @@ var nodescad = require('nodescad'),
 
 nodeScad.render(options, function (error, dataBuffer) {
     if (error)
-        console.error(error.message)
-    else
-        console.log(dataBuffer.toString('utf8'))
+        throw error
+    
+    console.log(dataBuffer.toString())
 })
 ```
