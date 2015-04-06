@@ -1,6 +1,9 @@
 title: NodeSCAD CLI Configuration Schema
 type: object
 properties:
+  binaryPath:
+    type: string
+    default: openscad
   inputFile:
     type: string
   outputFile:

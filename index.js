@@ -1,7 +1,6 @@
 var fs = require('fs'),
 	path = require('path'),
 	childProcess = require('child_process'),
-	os = require('os'),
 
 	jsonSchemaDefaults = require('json-schema-defaults'),
 	yaml = require('js-yaml'),
@@ -38,10 +37,8 @@ function render (options, callback) {
 		},
 		cameraCommand = '',
 		variablesCommand = '',
-		variables,
 		shellCommand,
 		outputFile,
-		binPath,
 		key
 
 
@@ -81,14 +78,8 @@ function render (options, callback) {
 				variablesCommand += key + '=' + options.variables[key] + ' '
 
 
-	if (os.platform() === 'darwin')
-		binPath = '~/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
-	else
-		binPath = 'openscad'
-
-
 	shellCommand = [
-		binPath,
+		options.binaryPath,
 		'-o',
 		outputFile,
 		options.dependenciesFile ? '-d ' + options.dependenciesFile : '',
