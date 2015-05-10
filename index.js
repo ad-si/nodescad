@@ -75,7 +75,7 @@ function render (options, callback) {
 	if (options.variables !== {})
 		for (key in options.variables)
 			if (options.variables.hasOwnProperty(key))
-				variablesCommand += ' -D ' + key + '=' + options.variables[key] + ' '
+				variablesCommand += '-D ' + key + '=' + options.variables[key] + ' '
 
 
 	shellCommand = [

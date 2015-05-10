@@ -78,7 +78,7 @@ nodeScad.renderFile(
 		binaryPath: binaryPath,
 		variables: {
 			height: 70,
-			robot: 10
+			anotherParamter: 10
 		}
 	},
 	function (error, bufferData) {
