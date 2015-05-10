@@ -30,7 +30,7 @@ function applyDefaults (options, defaults) {
 
 function render (options, callback) {
 
-	var validationResult = tv4.validateResult(options, configSchema, null, true),
+	var validationResult = tv4.validateResult(options, configSchema, null),
 		projectionsMap = {
 			orthogonal: 'o',
 			perspective: 'p'
@@ -75,7 +75,7 @@ function render (options, callback) {
 	if (options.variables !== {})
 		for (key in options.variables)
 			if (options.variables.hasOwnProperty(key))
-				variablesCommand += key + '=' + options.variables[key] + ' '
+				variablesCommand += ' -D ' + key + '=' + options.variables[key] + ' '
 
 
 	shellCommand = [
