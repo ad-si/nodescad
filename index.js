@@ -30,6 +30,31 @@ function applyDefaults (options, defaults) {
 	return options
 }
 
+function getCameraFlag (camera) {
+	if (camera.type === 'gimbal') {
+		return '--camera=' + [
+			camera.translate.x,
+			camera.translate.y,
+			camera.translate.z,
+			camera.rotate.x,
+			camera.rotate.y,
+			camera.rotate.z,
+			camera.distance
+		].join()
+	}
+	else if (camera.type === 'vector') {
+		return '--camera=' + [
+			camera.eye.x,
+			camera.eye.y,
+			camera.eye.z,
+			camera.center.x,
+			camera.center.y,
+			camera.center.z
+		].join()
+	}
+}
+
+
 function render (options, callback) {
 
 	var validationResult,
@@ -58,27 +83,7 @@ function render (options, callback) {
 
 	outputFile = options.outputFile || temp.path({suffix: '.' + options.format})
 
-	if (options.camera.type === 'gimbal') {
-		cameraCommand = '--camera=' + [
-			options.camera.translate.x,
-			options.camera.translate.y,
-			options.camera.translate.z,
-			options.camera.rotate.x,
-			options.camera.rotate.y,
-			options.camera.rotate.z,
-			options.camera.distance
-		].join()
-	}
-	else if (options.camera.type === 'vector') {
-		cameraCommand = '--camera=' + [
-			options.camera.eye.x,
-			options.camera.eye.y,
-			options.camera.eye.z,
-			options.camera.center.x,
-			options.camera.center.y,
-			options.camera.center.z
-		].join()
-	}
+
 
 	// Stringify cli variables
 	if (options.variables !== {})
@@ -95,7 +100,7 @@ function render (options, callback) {
 		options.dependenciesFile ? '-d ' + options.dependenciesFile : '',
 		options.makeCommand ? '-m ' + options.makeCommand : '',
 		variablesCommand,
-		cameraCommand,
+		getCameraFlag(options.camera),
 		'--imgsize=' + [options.imageSize.x, options.imageSize.y].join(),
 		'--projection=' + projectionsMap[options.projection],
 		options.render ? '--render' : '',
