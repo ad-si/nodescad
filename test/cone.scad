@@ -1,3 +1,5 @@
+height = 50;
+
 module cone() {
 	intersection() {
 		difference() {
@@ -13,7 +15,7 @@ module cone() {
 			}
 		}
 		translate([0, 0, 5])
-		cylinder(h = 50, r1 = 20, r2 = 5, center = true);
+		cylinder(h = height, r1 = 20, r2 = 5, center = true);
 	}
 }
 
