@@ -1,25 +1,30 @@
+'use strict'
+
 var nodeScad = require('../index.js'),
 	path = require('path'),
 	assert = require('assert'),
-	os = require('os'),
 	fs = require('fs'),
-	binaryPath = null,
+	binaryPath,
 	possibleBinaryPaths,
 	i
 
 
 possibleBinaryPaths = [
-	'~/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD',
+	path.join(
+		process.env.HOME,
+		'Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
+	),
 	'/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
 ]
 
 // Find our OpenSCAD path
-for (i in possibleBinaryPaths) {
+for (i = 0; i < possibleBinaryPaths.length; i++) {
 	if (fs.existsSync(possibleBinaryPaths[i])) {
-		binaryPath = possibleBinaryPaths[i];
-		break;
+		binaryPath = possibleBinaryPaths[i]
+		break
 	}
 }
+
 
 nodeScad.render(
 	{
