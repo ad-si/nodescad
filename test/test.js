@@ -3,17 +3,19 @@ var nodeScad = require('../index.js'),
 	assert = require('assert'),
 	os = require('os'),
 	fs = require('fs'),
-	binaryPath = null
+	binaryPath = null,
+	possibleBinaryPaths,
+	i
 
-var possibleBinaryPaths = [
+
+possibleBinaryPaths = [
 	'~/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD',
 	'/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
-	// Running on windows or Linux? What's a good path?
 ]
 
 // Find our OpenSCAD path
-for (var i in possibleBinaryPaths) {
-	if ( fs.existsSync( possibleBinaryPaths[i] ) ) {
+for (i in possibleBinaryPaths) {
+	if (fs.existsSync(possibleBinaryPaths[i])) {
 		binaryPath = possibleBinaryPaths[i];
 		break;
 	}
