@@ -109,35 +109,34 @@ function render (options, callback) {
 		options.inputFile
 	]
 
-	childProcess.exec(
-		shellCommand.join(' '),
-		function (error, stdout, stderr) {
+	function renderCallback (error, stdout, stderr) {
 
-			if (error) {
-				callback(error)
-				return
-			}
-
-			if (!options.outputFile)
-				fs.readFile(outputFile, {}, function (error, data) {
-
-					if (error) {
-						callback(error)
-						return
-					}
-					else
-						callback(null, data)
-
-					fs.unlink(outputFile, function (error) {
-						if (error && error.code !== 'ENOENT')
-							throw error
-					})
-				})
-
-			else
-				callback()
+		if (error) {
+			callback(error)
+			return
 		}
-	)
+
+		if (!options.outputFile)
+			fs.readFile(outputFile, {}, function (error, data) {
+
+				if (error) {
+					callback(error)
+					return
+				}
+				else
+					callback(null, data)
+
+				fs.unlink(outputFile, function (error) {
+					if (error && error.code !== 'ENOENT')
+						throw error
+				})
+			})
+
+		else
+			callback()
+	}
+
+	childProcess.exec(shellCommand.join(' '), renderCallback)
 }
 
 
