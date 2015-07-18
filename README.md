@@ -22,7 +22,14 @@ var nodescad = require('nodescad'),
 nodeScad.render(options, function (error, dataBuffer) {
     if (error)
         throw error
-    
+
     console.log(dataBuffer.toString())
 })
 ```
+
+
+## Styleguide
+
+The code in this repository is formatted as seen in [github.com/style-guides/JavaScript/tree/v0.1.1](https://github.com/style-guides/JavaScript/tree/v0.1.1)
+
+In order to check whether the code complies to the styleguide, just execute `npm run prepublish`.
