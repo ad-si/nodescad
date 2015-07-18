@@ -21,7 +21,7 @@
     "js-yaml": "^3.2.5",
     "json-schema-defaults": "0.0.2",
     "temp": "^0.8.1",
-    "tv4": "^1.1.5"
+    "tv4": "^1.1.12"
   },
   "scripts": {
     "test": "node ./test/test.js",
