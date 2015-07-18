@@ -115,9 +115,9 @@ function render (options, callback) {
 			return
 		}
 
-		if (stderr) {
-			callback(stderr)
-			return
+		var returnObject = {
+			stdout: stdout,
+			stderr: stderr
 		}
 
 		if (!options.outputFile)
@@ -127,8 +127,10 @@ function render (options, callback) {
 					callback(error)
 					return
 				}
-				else
-					callback(null, data)
+
+				returnObject.buffer = data
+
+				callback(null, returnObject)
 
 				fs.unlink(outputFile, function (error) {
 					if (error && error.code !== 'ENOENT')
@@ -137,7 +139,7 @@ function render (options, callback) {
 			})
 
 		else
-			callback()
+			callback(null, returnObject)
 	}
 
 	childProcess.exec(shellCommand.join(' '), renderCallback)

@@ -19,11 +19,11 @@ var nodescad = require('nodescad'),
 	}
 
 
-nodeScad.render(options, function (error, dataBuffer) {
+nodeScad.render(options, function (error, result) {
     if (error)
         throw error
 
-    console.log(dataBuffer.toString())
+    console.log(result.buffer.toString())
 })
 ```
 
