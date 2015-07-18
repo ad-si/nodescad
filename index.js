@@ -115,6 +115,11 @@ function render (options, callback) {
 			return
 		}
 
+		if (stderr) {
+			callback(stderr)
+			return
+		}
+
 		if (!options.outputFile)
 			fs.readFile(outputFile, {}, function (error, data) {
 
