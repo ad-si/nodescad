@@ -30,7 +30,7 @@ function applyDefaults (options, defaults) {
 
 function render (options, callback) {
 
-	var validationResult = tv4.validateResult(options, configSchema, null),
+	var validationResult,
 		projectionsMap = {
 			orthogonal: 'o',
 			perspective: 'p'
@@ -42,10 +42,17 @@ function render (options, callback) {
 		key
 
 
-	if (!validationResult.valid)
-		return console.error(validationResult.error.message)
-
 	options = applyDefaults(options, jsonSchemaDefaults(clone(configSchema)))
+
+
+	validationResult = tv4.validateResult(options, configSchema, null)
+
+	if (!validationResult.valid) {
+		return callback(new Error(
+			validationResult.error.message +
+			' for ' + validationResult.error.dataPath
+		))
+	}
 
 	outputFile = options.outputFile || temp.path({suffix: '.' + options.format})
 
