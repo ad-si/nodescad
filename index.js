@@ -62,7 +62,6 @@ function render (options, callback) {
 			orthogonal: 'o',
 			perspective: 'p'
 		},
-		cameraCommand = '',
 		variablesCommand = '',
 		shellCommand,
 		outputFile,
