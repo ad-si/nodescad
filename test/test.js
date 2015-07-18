@@ -31,7 +31,7 @@ nodeScad.render(
 		binaryPath: binaryPath,
 		inputFile: path.join(__dirname, 'cone.scad')
 	},
-	function (error, bufferData) {
+	function (error, result) {
 
 		var expectedFileSize,
 			actualFileSize
@@ -40,7 +40,7 @@ nodeScad.render(
 			throw error
 
 		expectedFileSize = 55235
-		actualFileSize = bufferData.toString().length
+		actualFileSize = result.buffer.toString().length
 
 		assert.equal(
 			actualFileSize,
@@ -57,7 +57,7 @@ nodeScad.renderFile(
 	{
 		binaryPath: binaryPath
 	},
-	function (error, bufferData) {
+	function (error, result) {
 
 		var expectedFileSize,
 			actualFileSize
@@ -66,7 +66,7 @@ nodeScad.renderFile(
 			throw error
 
 		expectedFileSize = 55235
-		actualFileSize = bufferData.toString().length
+		actualFileSize = result.buffer.toString().length
 
 		assert.equal(
 			actualFileSize,
@@ -88,7 +88,7 @@ nodeScad.renderFile(
 			anotherParamter: 10
 		}
 	},
-	function (error, bufferData) {
+	function (error, result) {
 
 		var expectedFileSize,
 			actualFileSize
@@ -97,7 +97,7 @@ nodeScad.renderFile(
 			throw error
 
 		expectedFileSize = 66100
-		actualFileSize = bufferData.toString().length
+		actualFileSize = result.buffer.toString().length
 
 		assert.equal(
 			actualFileSize,
