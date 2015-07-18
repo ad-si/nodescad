@@ -26,15 +26,12 @@
   "scripts": {
     "test": "node ./test/test.js",
     "jscs": "jscs --config ./node_modules/javascript-styleguide/.jscs.json  index.js test",
-    "jshint": "jshint --config ./node_modules/javascript-styleguide/.jshintrc --exclude node_modules .",
+    "jshint": "jshint --exclude node_modules .",
     "prepublish": " npm run jscs && npm run jshint && npm test"
   },
   "devDependencies": {
     "javascript-styleguide": "^0.1.1",
     "jscs": "^1.13.1",
     "jshint": "^2.8.0"
-  },
-  "jshintConfig": {
-    "extends": "./node_modules/javascript-styleguide/.jshintrc"
   }
 }
