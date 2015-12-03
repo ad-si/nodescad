@@ -25,7 +25,7 @@ for (i = 0; i < possibleBinaryPaths.length; i++) {
 	}
 }
 
-
+let description1 = 'Render an OpenSCAD file with render()'
 nodeScad.render(
 	{
 		binaryPath: binaryPath,
@@ -33,11 +33,12 @@ nodeScad.render(
 	},
 	function (error, result) {
 
+		process.stdout.write(description1)
+
 		var expectedFileSize,
 			actualFileSize
 
-		if (error)
-			throw error
+		assert(!error, '\n' + error)
 
 		expectedFileSize = 55235
 		actualFileSize = result.buffer.toString().length
@@ -49,9 +50,12 @@ nodeScad.render(
 			'Expected ' + expectedFileSize +
 			' but got ' + actualFileSize
 		)
+		console.log(' ✔︎')
 	}
 )
 
+
+let description2 = 'Render an OpenSCAD file with renderFile()'
 nodeScad.renderFile(
 	path.join(__dirname, 'cone.scad'),
 	{
@@ -59,11 +63,12 @@ nodeScad.renderFile(
 	},
 	function (error, result) {
 
+		process.stdout.write(description2)
+
 		var expectedFileSize,
 			actualFileSize
 
-		if (error)
-			throw error
+		assert(!error, '\n' + error)
 
 		expectedFileSize = 55235
 		actualFileSize = result.buffer.toString().length
@@ -75,10 +80,12 @@ nodeScad.renderFile(
 			'Expected ' + expectedFileSize +
 			' but got ' + actualFileSize
 		)
+		console.log(' ✔︎')
 	}
 )
 
-// Test for overridable paramters
+
+let description3 = 'Override parameters'
 nodeScad.renderFile(
 	path.join(__dirname, 'cone.scad'),
 	{
@@ -90,11 +97,12 @@ nodeScad.renderFile(
 	},
 	function (error, result) {
 
+		process.stdout.write(description3)
+
 		var expectedFileSize,
 			actualFileSize
 
-		if (error)
-			throw error
+		assert(!error, '\n' + error)
 
 		expectedFileSize = 66100
 		actualFileSize = result.buffer.toString().length
@@ -106,5 +114,36 @@ nodeScad.renderFile(
 			'Expected ' + expectedFileSize +
 			' but got ' + actualFileSize
 		)
+		console.log(' ✔︎')
+	}
+)
+
+
+let description4 = 'Pass input file as a string'
+nodeScad.render(
+	{
+		input: 'cube([2,3,4]);',
+		binaryPath: binaryPath
+	},
+	function (error, result) {
+
+		process.stdout.write(description4)
+
+		var expectedFileSize,
+			actualFileSize
+
+		assert(!error, '\n' + error)
+
+		expectedFileSize = 1437
+		actualFileSize = result.buffer.toString().length
+
+		assert.equal(
+			actualFileSize,
+			expectedFileSize,
+			'Stl file has wrong size. ' +
+			'Expected ' + expectedFileSize +
+			' but got ' + actualFileSize
+		)
+		console.log(' ✔︎')
 	}
 )
