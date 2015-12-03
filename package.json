@@ -27,11 +27,11 @@
     "test": "node ./test/test.js",
     "jscs": "jscs --config ./node_modules/javascript-styleguide/.jscs.json  index.js test",
     "jshint": "jshint --exclude node_modules .",
-    "prepublish": " npm run jscs && npm run jshint && npm test"
+    "prepublish": "npm run jscs && npm run jshint && npm test"
   },
   "devDependencies": {
     "javascript-styleguide": "^0.1.1",
-    "jscs": "^1.13.1",
-    "jshint": "^2.8.0"
+    "jscs": "^2.6.0",
+    "jshint": "^2.9.1-rc1"
   }
 }

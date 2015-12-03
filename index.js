@@ -18,11 +18,9 @@ var fs = require('fs'),
 
 function applyDefaults (options, defaults) {
 
-	var key
-
 	options = options || {}
 
-	for (key in defaults)
+	for (let key in defaults)
 		if (defaults.hasOwnProperty(key) &&
 			typeof options[key] === 'undefined')
 			options[key] = defaults[key]
@@ -54,24 +52,58 @@ function getCameraFlag (camera) {
 	}
 }
 
+function createInputFile (options) {
+	if (options.input) {
+		let inputObject = temp.openSync()
+		fs.writeSync(inputObject.fd, options.input)
+		fs.closeSync(inputObject.fd)
+		options.inputFile = inputObject.path
+	}
+
+	return options.inputFile
+}
+
+function stringifyCliVariables (options) {
+
+	let variablesCommand = ''
+
+	if (options.variables !== {})
+		for (let key in options.variables)
+			if (options.variables.hasOwnProperty(key))
+				variablesCommand += `-D ${key}=${options.variables[key]} `
+
+	return variablesCommand
+}
+
+function buildShellCommand (options) {
+
+	let projectionsMap = {
+		orthogonal: 'o',
+		perspective: 'p'
+	}
+
+	return [
+		options.binaryPath,
+		'-o',
+		options.outputFile || options.tempOutputFile,
+		options.dependenciesFile ? '-d ' + options.dependenciesFile : '',
+		options.makeCommand ? '-m ' + options.makeCommand : '',
+		stringifyCliVariables(options),
+		getCameraFlag(options.camera),
+		'--imgsize=' + [options.imageSize.x, options.imageSize.y].join(),
+		'--projection=' + projectionsMap[options.projection],
+		options.render ? '--render' : '',
+		'--preview=' + options.preview,
+		options.csglimit ? '--csglimit=' + options.csglimit : '',
+		createInputFile(options)
+	].join(' ')
+}
 
 function render (options, callback) {
 
-	var validationResult,
-		projectionsMap = {
-			orthogonal: 'o',
-			perspective: 'p'
-		},
-		variablesCommand = '',
-		shellCommand,
-		outputFile,
-		key
-
-
 	options = applyDefaults(options, jsonSchemaDefaults(clone(configSchema)))
 
-
-	validationResult = tv4.validateResult(options, configSchema, null)
+	let validationResult = tv4.validateResult(options, configSchema, null)
 
 	if (!validationResult.valid) {
 		return callback(new Error(
@@ -82,38 +114,9 @@ function render (options, callback) {
 
 	temp.track()
 
-	outputFile = options.outputFile || temp.path({suffix: '.' + options.format})
+	if (!options.outputFile)
+		options.tempOutputFile = temp.path({suffix: '.' + options.format})
 
-	if (options.input) {
-		let inputObject = temp.openSync()
-		fs.writeSync(inputObject.fd, options.input)
-		fs.closeSync(inputObject.fd)
-		options.inputFile = inputObject.path
-	}
-
-	// Stringify cli variables
-	if (options.variables !== {})
-		for (key in options.variables)
-			if (options.variables.hasOwnProperty(key))
-				variablesCommand += '-D ' +
-					key + '=' + options.variables[key] + ' '
-
-
-	shellCommand = [
-		options.binaryPath,
-		'-o',
-		outputFile,
-		options.dependenciesFile ? '-d ' + options.dependenciesFile : '',
-		options.makeCommand ? '-m ' + options.makeCommand : '',
-		variablesCommand,
-		getCameraFlag(options.camera),
-		'--imgsize=' + [options.imageSize.x, options.imageSize.y].join(),
-		'--projection=' + projectionsMap[options.projection],
-		options.render ? '--render' : '',
-		'--preview=' + options.preview,
-		options.csglimit ? '--csglimit=' + options.csglimit : '',
-		options.inputFile
-	]
 
 	function renderCallback (error, stdout, stderr) {
 
@@ -128,7 +131,7 @@ function render (options, callback) {
 		}
 
 		if (!options.outputFile)
-			fs.readFile(outputFile, {}, function (error, data) {
+			fs.readFile(options.tempOutputFile, {}, function (error, data) {
 
 				if (error) {
 					callback(error)
@@ -139,7 +142,7 @@ function render (options, callback) {
 
 				callback(null, returnObject)
 
-				fs.unlink(outputFile, function (error) {
+				fs.unlink(options.tempOutputFile, function (error) {
 					if (error && error.code !== 'ENOENT')
 						throw error
 				})
@@ -149,7 +152,10 @@ function render (options, callback) {
 			callback(null, returnObject)
 	}
 
-	childProcess.exec(shellCommand.join(' '), renderCallback)
+	childProcess.exec(
+		buildShellCommand(options),
+		renderCallback
+	)
 }
 
 
