@@ -80,9 +80,16 @@ function render (options, callback) {
 		))
 	}
 
+	temp.track()
+
 	outputFile = options.outputFile || temp.path({suffix: '.' + options.format})
 
-
+	if (options.input) {
+		let inputObject = temp.openSync()
+		fs.writeSync(inputObject.fd, options.input)
+		fs.closeSync(inputObject.fd)
+		options.inputFile = inputObject.path
+	}
 
 	// Stringify cli variables
 	if (options.variables !== {})
